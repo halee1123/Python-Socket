@@ -5,6 +5,7 @@
 
 ## 执行Server:
     python Server.py
+    Server listening on 127.0.0.1:3344
 
 ## 执行Client.py
     python Client.py

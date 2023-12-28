@@ -1,16 +1,26 @@
 # Client.py
+
+# 导入 Python 的 socket 模块，用于网络通信
 import socket
+
+# 导入 cryptography 模块，用于加密解密操作
 from cryptography.hazmat.backends import default_backend
+
+# 导入 cryptography 中的序列化和哈希模块
 from cryptography.hazmat.primitives import serialization, hashes
+
+# 导入 cryptography 中的非对称加密相关模块
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
+
+# 导入 configparser 模块，用于解析配置文件
 import configparser
 
 def load_config():
     # 读取配置文件中的 IP 地址和端口信息
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    common_config = config['Common']
-    return common_config['ip'], int(common_config['port'])
+    config = configparser.ConfigParser()  # 创建 ConfigParser 对象，用于解析 INI 配置文件
+    config.read('config.ini')  # 读取配置文件
+    common_config = config['Common']  # 获取 Common 部分的配置信息
+    return common_config['ip'], int(common_config['port'])  # 返回解析得到的 IP 地址和端口号
 
 def encrypt_data(data, public_key):
     # 使用公钥加密数据
@@ -22,11 +32,11 @@ def encrypt_data(data, public_key):
             label=None
         )
     )
-    return encrypted_data
+    return encrypted_data  # 返回加密后的数据
 
 def send_data(data, public_key):
     # 向服务器发送加密数据
-    ip, port = load_config()
+    ip, port = load_config()  # 获取配置文件中的 IP 地址和端口号
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # 创建 TCP 套接字
     client.connect((ip, port))  # 连接到服务器
 

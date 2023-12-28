@@ -1,19 +1,29 @@
 # Server.py
+
+# 导入 Python 的 socket 模块，用于网络通信
 import socket
+
+# 导入 subprocess 模块，用于执行 shell 命令
 import subprocess
+
+# 导入 cryptography 模块，用于加密解密操作
 from cryptography.hazmat.backends import default_backend
+
+# 导入 cryptography 中的序列化和哈希模块
 from cryptography.hazmat.primitives import serialization, hashes
+
+# 导入 cryptography 中的非对称加密相关模块
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
+
+# 导入 configparser 模块，用于解析配置文件
 import configparser
-
-
 
 def load_config():
     # 读取配置文件中的 IP 地址和端口信息
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    common_config = config['Common']
-    return common_config['ip'], int(common_config['port'])
+    config = configparser.ConfigParser()  # 创建 ConfigParser 对象，用于解析 INI 配置文件
+    config.read('config.ini')  # 读取配置文件
+    common_config = config['Common']  # 获取 Common 部分的配置信息
+    return common_config['ip'], int(common_config['port'])  # 返回解析得到的 IP 地址和端口号
 
 def decrypt_data(data, private_key):
     # 使用私钥解密数据
@@ -25,16 +35,16 @@ def decrypt_data(data, private_key):
             label=None
         )
     )
-    return decrypted_data.decode()
+    return decrypted_data.decode()  # 返回解密后的字符串数据
 
 def execute_command(command):
     # 执行 shell 命令并返回结果
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    return result.stdout
+    return result.stdout  # 返回 shell 命令执行结果的标准输出
 
 def start_server(private_key):
     # 启动服务器
-    ip, port = load_config()
+    ip, port = load_config()  # 获取配置文件中的 IP 地址和端口号
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # 创建 TCP 套接字
     server.bind((ip, port))  # 绑定 IP 地址和端口
     server.listen(1)  # 监听连接
